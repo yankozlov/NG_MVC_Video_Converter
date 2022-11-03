@@ -3,6 +3,12 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Video Converter</h1>
+    
+    <div class="container">
+        <form asp-action="UploadPage" asp-controller="Home" method="post" enctype="multipart/form-data">  
+            <input type="file" name="input_file" required/>
+            <input type="submit" value="Convert"></input>      
+        </form>
+    </div>   
 </div>

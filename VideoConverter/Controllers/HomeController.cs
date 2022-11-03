@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,19 @@ namespace VideoConverter.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult UploadPage(IFormFile input_file)
+        {
+            if (input_file == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            FileModel model = new FileModel { Name = input_file.FileName };
+
+            return View(model);
         }
 
         public IActionResult Privacy()
