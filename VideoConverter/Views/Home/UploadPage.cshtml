@@ -1,3 +1,17 @@
 ﻿@model VideoConverter.Models.FileModel
 
-<a href="#">@Model.Name</a>
+<div class="text-center">
+    <h2 class="display-4">@Model.Name</h2>
+	
+	@if (ViewBag.Message != null)
+    {
+	    <div class="alert alert-success" style="margin-top:50px">
+		    @ViewBag.Message
+	    </div>
+    }
+
+
+	<form asp-action="Download" asp-route-filename="@Model.Name">
+		<input type="submit" value="Download" />
+	</form>
+</div>
