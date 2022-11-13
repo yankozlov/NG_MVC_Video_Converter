@@ -11,8 +11,8 @@
     </div>
 
 	@if (ViewBag.Success) {
-		<form asp-action="Convert" asp-route-name=@Model.Name method="post">
-			<input type="submit" value="Convert" />								
+		<form asp-action="Download" asp-route-filename=@Model.Name>
+			<input type="submit" value="Download" />
 		</form>
 	}
 	else

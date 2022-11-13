@@ -8,4 +8,9 @@
     <Folder Include="Uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Xabe.FFmpeg" Version="5.2.0" />
+    <PackageReference Include="Xabe.FFmpeg.Downloader" Version="5.2.0" />
+  </ItemGroup>
+
 </Project>
