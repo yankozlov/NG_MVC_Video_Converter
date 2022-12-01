@@ -1,14 +1,52 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "VideoConverter";
+	Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Video Converter</h1>
-    
-    <div class="container">
-        <form asp-action="UploadPage" asp-controller="Home" method="post" enctype="multipart/form-data">  
-            <input type="file" name="inputFile" required/>
-            <button type="submit">Сonvert</button>      
-        </form>
-    </div>   
-</div>
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8"/>
+		<title>VideoConverter</title>
+		<!-- Google web fonts -->
+		<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700" rel='stylesheet' />
+
+		<!-- The main CSS file -->
+		<link href="~/css/style.css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<form id="upload" method="post" asp-action="Upload" enctype="multipart/form-data">
+			<div id="drop">
+				<p>Drop Here or </p>
+
+				<a>Browse</a>
+				<input type="file" name="inputFile" multiple />
+			</div>
+
+			<ul>
+				<!-- The file uploads will be shown here -->
+			</ul>
+		</form>
+
+		<form id="convert" method="post" asp-action="Converter">
+			<input type="hidden" id="fileList" name="fileList" value="" />
+			<button id="convert-button" type="submit" disabled >Convert</button>
+		</form>
+        
+		<!-- JavaScript Includes -->
+		<script src="~/lib/jquery/dist/jquery.min.js"></script>
+		<script src="~/lib/jquery-knob/jquery.knob.js"></script>
+
+		<!-- jQuery File Upload Dependencies -->
+		<script src="~/lib/jquery-ui-widget/jquery.ui.widget.js"></script>
+		<script src="~/lib/jquery-iframe-transport/jquery.iframe-transport.js"></script>
+		<script src="~/lib/jquery-fileupload/jquery.fileupload.min.js"></script>
+		
+		<!-- Our main JS file -->
+		<script src="~/js/index.js"></script>
+
+	</body>
+</html>

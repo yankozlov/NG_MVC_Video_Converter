@@ -1,0 +1,387 @@
+/*-------------------------
+    Simple reset
+--------------------------*/
+
+
+*{
+    margin:0;
+    padding:0;
+}
+
+
+/*-------------------------
+    General Styles
+--------------------------*/
+
+
+html{
+    background-color:#ebebec;
+
+    background-image:-webkit-radial-gradient(center, #ebebec, #b4b4b4);
+    background-image:-moz-radial-gradient(center, #ebebec, #b4b4b4);
+    background-image:radial-gradient(center, #ebebec, #b4b4b4);
+
+    min-height:900px;
+}
+
+body{
+    font:15px/1.3 Arial, sans-serif;
+    color: #4f4f4f;
+}
+
+a, a:visited {
+    outline:none;
+    color:#389dc1;
+}
+
+    a:hover {
+        text-decoration:none;
+    }
+
+section, footer, header, aside{
+    display: block;
+}
+
+
+/*----------------------------
+    The file upload form
+-----------------------------*/
+
+
+#upload{
+    font-family:'PT Sans Narrow', sans-serif;
+    background-color:#373a3d;
+
+    background-image:-webkit-linear-gradient(top, #373a3d, #313437);
+    background-image:-moz-linear-gradient(top, #373a3d, #313437);
+    background-image:linear-gradient(top, #373a3d, #313437);
+
+    max-width: 640px;
+    padding-top: 60px;
+
+    padding:30px;
+    border-radius:3px;
+
+    margin:200px auto 100px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#drop{
+    background-color: #2E3134;
+    padding: 40px 50px;
+    margin-bottom: 30px;
+    border: 20px solid rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    border-image: url('../img/border-image.png') 25 repeat;
+    text-align: center;
+    text-transform: uppercase;
+
+    font-size:16px;
+    font-weight:bold;
+    color:#7f858a;
+}
+
+    #drop a {
+        background-color:#007a96;
+        padding: 12px 26px;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 2px;
+        cursor: pointer;
+        display: inline-block;
+        margin-top: 12px;
+        line-height: 1;
+    }
+
+        #drop a:hover {
+            background-color: #0986a3;
+        }
+
+    #drop input {
+        display:none;
+    }
+
+#upload ul {
+    list-style:none;
+    margin: 0 -30px;
+    border-top: 1px solid #2b2e31;
+    border-bottom: 1px solid #3d4043;
+}
+
+    #upload ul li {
+        background-color: #333639;
+        background-image: -webkit-linear-gradient(top, #333639, #303335);
+        background-image: -moz-linear-gradient(top, #333639, #303335);
+        background-image: linear-gradient(top, #333639, #303335);
+        border-top: 1px solid #3d4043;
+        border-bottom: 1px solid #2b2e31;
+        padding: 15px;
+        height: 52px;
+        position: relative;
+    }
+
+        #upload ul li input {
+            display: none;
+        }
+
+        #upload ul li p {
+            width: inherit;
+            overflow: hidden;
+            white-space: nowrap;
+            color: #EEE;
+            font-size: 16px;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            left: 100px;
+        }
+
+        #upload ul li i {
+            font-weight: normal;
+            font-style: normal;
+            color: #7f7f7f;
+            display: block;
+        }
+
+        #upload ul li canvas {
+            top: 15px;
+            left: 32px;
+            position: absolute;
+        }
+
+        #upload ul li span {
+            width: 15px;
+            height: 12px;
+            background: url('../img/icons.png') no-repeat;
+            position: absolute;
+            top: 34px;
+            right: 33px;
+            cursor: pointer;
+        }
+
+        #upload ul li.working span {
+            height: 16px;
+            background-position: 0 -12px;
+        }
+
+        #upload ul li.error p {
+            color: red;
+        }
+
+.settings {
+    position: absolute;
+    top: 34px;
+    right: 75px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+    .settings select, select:visited {
+        outline: none;
+        background-color: #007a96;
+        font-weight: inherit;
+        color: inherit;
+        text-transform: inherit;
+    }
+
+    .settings select:click {
+        color: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+    }
+
+    .settings select:hover {
+        text-decoration: none;
+    }
+
+@-webkit-keyframes swing {
+    15% {
+        -webkit-transform: translateX(5px);
+        transform: translateX(5px);
+    }
+
+    30% {
+        -webkit-transform: translateX(-5px);
+        transform: translateX(-5px);
+    }
+
+    50% {
+        -webkit-transform: translateX(3px);
+        transform: translateX(3px);
+    }
+
+    65% {
+        -webkit-transform: translateX(-3px);
+        transform: translateX(-3px);
+    }
+
+    80% {
+        -webkit-transform: translateX(2px);
+        transform: translateX(2px);
+    }
+
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+@keyframes swing {
+    15% {
+        -webkit-transform: translateX(5px);
+        transform: translateX(5px);
+    }
+
+    30% {
+        -webkit-transform: translateX(-5px);
+        transform: translateX(-5px);
+    }
+
+    50% {
+        -webkit-transform: translateX(3px);
+        transform: translateX(3px);
+    }
+
+    65% {
+        -webkit-transform: translateX(-3px);
+        transform: translateX(-3px);
+    }
+
+    80% {
+        -webkit-transform: translateX(2px);
+        transform: translateX(2px);
+    }
+
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
+#convert, #download {
+    text-align: center;
+}
+
+    #convert button, #download button {
+        font-family: 'PT Sans Narrow', sans-serif;
+        text-transform: uppercase;
+        background-color: #007a96;
+        padding: 22px 36px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 2px;
+        cursor: pointer;
+        display: inline-block;
+        margin-top: 12px;
+        margin-bottom: 22px;
+        line-height: 1;
+        transition-duration: 0.2s;
+        transition-property: background-color;
+    }
+
+    #convert button:hover, #download button:hover {
+        background-color: #0986a3;
+    }
+
+    #convert button:disabled, #download button:disabled {
+        background-color: #424549;
+    }
+
+    #convert button:disabled:active, #download button:disabled:active {
+        -webkit-animation: swing 1s ease;
+        animation: swing 1s ease;
+        -webkit-animation-iteration-count: 1;
+        animation-iteration-count: 1;
+    }
+
+
+#convert input, #download input {
+    display: none;
+}
+
+
+
+#convert-status {
+    font-family: 'PT Sans Narrow', sans-serif;
+    background-color: #373a3d;
+    background-image: -webkit-linear-gradient(top, #373a3d, #313437);
+    background-image: -moz-linear-gradient(top, #373a3d, #313437);
+    background-image: linear-gradient(top, #373a3d, #313437);
+    max-width: 640px;
+    padding-top: 60px;
+    padding: 30px;
+    border-radius: 3px;
+    margin: 200px auto 100px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+    #convert-status ul {
+        list-style: none;
+        margin: 0 -30px;
+        border-top: 1px solid #2b2e31;
+        border-bottom: 1px solid #3d4043;
+    }
+
+        #convert-status ul li {
+            background-color: #333639;
+            background-image: -webkit-linear-gradient(top, #333639, #303335);
+            background-image: -moz-linear-gradient(top, #333639, #303335);
+            background-image: linear-gradient(top, #333639, #303335);
+            border-top: 1px solid #3d4043;
+            border-bottom: 1px solid #2b2e31;
+            padding: 15px;
+            height: 52px;
+            position: relative;
+        }
+
+            #convert-status ul li input {
+                display: none;
+            }
+
+            #convert-status ul li p {
+                width: inherit;
+                overflow: hidden;
+                white-space: nowrap;
+                color: #EEE;
+                font-size: 16px;
+                font-weight: bold;
+                position: absolute;
+                top: 20px;
+                left: 100px;
+            }
+
+            #convert-status ul li i {
+                font-weight: normal;
+                font-style: normal;
+                color: #7f7f7f;
+                display: block;
+            }
+
+            #convert-status ul li canvas {
+                top: 15px;
+                left: 32px;
+                position: absolute;
+            }
+
+            #convert-status ul li span {
+                width: 15px;
+                height: 12px;
+                background: url('../img/icons.png') no-repeat;
+                position: absolute;
+                top: 34px;
+                right: 33px;
+                cursor: pointer;
+            }
+
+            #convert-status ul li.working span {
+                height: 16px;
+                background-position: 0 -12px;
+            }
+
+            #convert-status ul li.error p {
+                color: red;
+            }
