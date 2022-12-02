@@ -7,75 +7,52 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using VideoConverter.Models;
 using Xabe.FFmpeg;
-using Xabe.FFmpeg.Downloader;
 
 namespace VideoConverter.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private IWebHostEnvironment _appEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, IWebHostEnvironment appEnvironment)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _appEnvironment = appEnvironment;
-
-            string ffmpegPath = Path.Combine(Directory.GetCurrentDirectory(), "ffmpeg");
-
-            if (Directory.Exists(ffmpegPath) == false)
-            {
-                Directory.CreateDirectory(ffmpegPath);
-            }
-            if ((Directory.Exists(Path.Combine(ffmpegPath, "ffmpeg.exe"))
-                && Directory.Exists(Path.Combine(ffmpegPath, "ffprobe.exe"))) == false)
-            {
-                FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official, ffmpegPath)
-                    .GetAwaiter().GetResult();
-            }
-            FFmpeg.SetExecutablesPath(ffmpegPath);   
         }
 
         public IActionResult Index()
         {
             return View();
         }
-
         [HttpPost]
-        async public Task<IActionResult> UploadPage(IFormFile inputFile)
+        public IActionResult Converter(string fileList)
         {
-            bool isUploaded = false;
-            if (inputFile != null)
+            if (fileList == null)
             {
-                isUploaded = await Upload(inputFile);
+                return Redirect("Index");
             }
             
-            if (!isUploaded)
-            {
-                ViewBag.Message = "File is not uploaded";
-                ViewBag.Success = false;
-                return View();
-            }
+            var model = new UserModel();
 
-            ViewBag.Message = "File is successfully uploaded";
-            ViewBag.Success = true;
+            List<Dictionary<string, string>>? filesDict = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(fileList);
 
-            var item = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "Uploads"))
-                                .Where(f => System.IO.Path.GetFileName(f) == inputFile.FileName)
-                                .FirstOrDefault();
-            var model = new FileModel { Name = Path.GetFileName(item), IsConverted = false };
-
+            model.Files = filesDict.Select(p => new FileModel { Name = p["key"], Extension = p["value"] }).ToList();
             return View(model);
         }
 
+        [HttpPost]
         public async Task<bool> Upload(IFormFile inputFile)
         {
-            var fileName = Path.GetFileName(inputFile.FileName);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", fileName);
+            if (inputFile == null)
+            {
+                return false;
+            }
+            
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", 
+                Path.GetFileName(inputFile.FileName));
 
             if (System.IO.File.Exists(filePath))
             {
@@ -89,7 +66,7 @@ namespace VideoConverter.Controllers
                     await uploadedFile.CopyToAsync(localFile);
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return false;
             }
@@ -97,11 +74,12 @@ namespace VideoConverter.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Convert(FileModel model)
+        public async Task<string> Convert(FileModel file)
         {          
-            string inputFile = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", model.Name);
-            string outputFile = Path.Combine(Directory.GetCurrentDirectory(), "Converted", 
-                Path.ChangeExtension(model.Name, "avi"));
+            string inputFile = Path.Combine(Directory.GetCurrentDirectory(), 
+                "Uploads", file.Name);
+            string outputFile = Path.Combine(Directory.GetCurrentDirectory(), 
+                "Converted", Path.ChangeExtension(file.Name, file.Extension));
 
             IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(inputFile);
             IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
@@ -119,16 +97,28 @@ namespace VideoConverter.Controllers
                 .SetOutput(outputFile)
                 .Start();
 
-            ViewBag.Success = true;
-
-            return View(model);
+            return Path.GetFileName(outputFile);
         }
+
         [HttpPost]
         public async Task<IActionResult> Download(string filename)
         {
+            //if (fileList == null)
+            //{
+            //    return Redirect("Index");
+            //}
+            //
+            //var model = new UserModel();
+            //
+            //model.Files = JsonSerializer.Deserialize<List<FileModel>>(fileList);
+
+            if (filename == null)
+            {
+                return Content("filename is null");
+            }
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Converted", 
-                Path.ChangeExtension(filename, "avi"));
+                Path.GetFileName(filename));
             
             if (filename == null || System.IO.File.Exists(path) == false)
             {
