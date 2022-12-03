@@ -63,6 +63,13 @@ $(function () {
 
             });
 
+            var select = data.context.find('.format-select');
+            select.change(function () {
+                fileList[fileList.findIndex(x => x.key == data.files[0].name)].val = select.find('option:selected').text();
+
+                console.log('format changed')
+            });
+
             // Automatically upload the file once it is added to the queue
             var jqXHR = data.submit();
         },
@@ -116,7 +123,6 @@ $(function () {
         e.preventDefault();
     });
 
-    // Function to normalize interface after fileList' length change
 
     // Helper function to remove item from fileList
     function removeFileListItem(list, item) {
