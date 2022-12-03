@@ -38,8 +38,21 @@ namespace VideoConverter.Controllers
             var model = new UserModel();
 
             List<Dictionary<string, string>>? filesDict = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(fileList);
+            
+            model.Files = filesDict.Select(p => new FileModel { Name = p["key"], Extension = p["value"], Status = "preparing"}).ToList();
 
-            model.Files = filesDict.Select(p => new FileModel { Name = p["key"], Extension = p["value"] }).ToList();
+            for (var i = 0; i < model.Files.Count; i++)
+            {
+                FileInfo fi = new FileInfo(Path.Combine(Directory.GetCurrentDirectory(), "Uploads",
+                    Path.GetFileName(model.Files[i].Name)));
+
+                model.Files[i].Size = 0;
+                if (fi.Exists)
+                {
+                    model.Files[i].Size = fi.Length;
+                }
+            };
+
             return View(model);
         }
 
@@ -82,10 +95,32 @@ namespace VideoConverter.Controllers
                 "Converted", Path.ChangeExtension(file.Name, file.Extension));
 
             IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(inputFile);
-            IStream audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-                ?.SetCodec(AudioCodec.mp3);
-            IStream videoStream = mediaInfo.VideoStreams.FirstOrDefault()
-                ?.SetCodec(VideoCodec.mjpeg);
+
+            IStream audioStream;
+            IStream videoStream;
+            switch (file.Extension)
+            {
+                case "avi":
+                    audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+                        ?.SetCodec(AudioCodec.mp3);
+                    videoStream = mediaInfo.VideoStreams.FirstOrDefault()
+                        ?.SetCodec(VideoCodec.mjpeg);
+                    break;
+                case "mp4":
+                    audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+                        ?.SetCodec(AudioCodec.aac);
+                    videoStream = mediaInfo.VideoStreams.FirstOrDefault()
+                        ?.SetCodec(VideoCodec.h264);
+                    break;
+                case "mov":
+                    audioStream = mediaInfo.AudioStreams.FirstOrDefault()
+                        ?.SetCodec(AudioCodec.mp3);
+                    videoStream = mediaInfo.VideoStreams.FirstOrDefault()
+                        ?.SetCodec(VideoCodec.mpeg4);
+                    break;
+                default:
+                    return "";
+            }
 
             if (System.IO.File.Exists(outputFile))
             {
@@ -150,7 +185,6 @@ namespace VideoConverter.Controllers
                 {".avi", "video/x-msvideo"},
                 {".mp4", "video/mp4"},
                 {".mpeg", "video/mpeg"},
-                {".webm", "video/webm"}
             };
         }
         //!!!!!
