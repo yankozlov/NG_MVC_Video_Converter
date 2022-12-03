@@ -57,6 +57,7 @@ namespace VideoConverter.Controllers
         }
 
         [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 100_000_000)]
         public async Task<bool> Upload(IFormFile inputFile)
         {
             if (inputFile == null)
@@ -138,15 +139,6 @@ namespace VideoConverter.Controllers
         [HttpPost]
         public async Task<IActionResult> Download(string filename)
         {
-            //if (fileList == null)
-            //{
-            //    return Redirect("Index");
-            //}
-            //
-            //var model = new UserModel();
-            //
-            //model.Files = JsonSerializer.Deserialize<List<FileModel>>(fileList);
-
             if (filename == null)
             {
                 return Content("filename is null");
